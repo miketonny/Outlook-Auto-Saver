@@ -1,0 +1,12 @@
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\bin\Release\EmailAutoSaver.dll
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\bin\Release\EmailAutoSaver.pdb
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\bin\Release\EmailAutoSaver.dll.manifest
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\bin\Release\EmailAutoSaver.vsto
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\bin\Release\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\bin\Release\Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\Release\EmailAutoSaver.Properties.Resources.resources
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\Release\EmailAutoSaver.csproj.GenerateResource.cache
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\Release\EmailAutoSaver.csproj.CoreCompileInputs.cache
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\Release\EmailAutoSaver.csproj.CopyComplete
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\Release\EmailAutoSaver.dll
+C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\Release\EmailAutoSaver.pdb
