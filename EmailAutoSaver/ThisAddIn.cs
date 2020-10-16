@@ -25,7 +25,10 @@ namespace EmailAutoSaver
             {
                 foreach (Outlook.Folder task in job.Folders)
                 {
-                    _taskItems.Add(task.Items);                   
+                    foreach (Outlook.Folder subTask in task.Folders)
+                    {
+                        _taskItems.Add(subTask.Items);
+                    }
                 }             
             }
             foreach (Items task in _taskItems)
@@ -36,31 +39,40 @@ namespace EmailAutoSaver
 
         private void AddItem(object item)
         {
-            // Step 1. fetch folder path etc..
+            // Step 1. fetch folder path etc..  
             var msg = item as MailItem;
             var fdr = msg.Parent as Folder;
             var folders = fdr.FolderPath.Split('\\').ToList();
             // gets the last two job/task name
-            var jobName = folders[folders.Count -2];
-            var taskName = folders.Last();
+            var jobName = folders[folders.Count -3]; // get job name
+            var taskName = folders[folders.Count - 2]; // get correspondence
+            var subTaskName = folders.Last(); // get sub task
             // Step 2. Save email to disk
-            var dir = @"C:\Jobs\";
+            var dir = @"R:\"; // test c:\jobs\
             try
             {
                 string jobFolderPath = Path.Combine(dir, jobName);
+                //MessageBox.Show(jobFolderPath);
                 if (!Directory.Exists(jobFolderPath))
                 {
                     Directory.CreateDirectory(jobFolderPath); // create if not exists..
                 }
                 // check if folder exist
                 var destPath = Path.Combine(dir, jobName, taskName);
+                //MessageBox.Show(destPath);
                 if (!Directory.Exists(destPath))
                 {
                     Directory.CreateDirectory(destPath); // create if not exists..
                 }
+                var finalPath = Path.Combine(dir, jobName, taskName, subTaskName);
+                // MessageBox.Show(finalPath);
+                if (!Directory.Exists(finalPath))
+                {
+                    Directory.CreateDirectory(finalPath); // create if not exists..
+                }
                 // task folder exists, save the email
-                string msgTitle = CleanupMessageTitle(msg.Subject);
-                var fileName = GetFileName(destPath + @"\" + msgTitle, 0);
+                string msgTitle = CleanupMessageTitle(msg.Subject, msg.CreationTime);
+                var fileName = GetFileName(finalPath + @"\" + msgTitle, 0);
                 msg.SaveAs(fileName);
             }
             catch (System.Exception e)
@@ -69,10 +81,11 @@ namespace EmailAutoSaver
             }
         }
 
-        private string CleanupMessageTitle(string subject)
+        private string CleanupMessageTitle(string subject, DateTime time)
         {
             var rgx = new Regex(@"\||\/|\<|\>|""|:|\*|\\|\?");
-            return rgx.Replace(subject, "");
+            string currentDT = time.ToString("yyyyMMdd-hhmmss");
+            return currentDT + "-" + rgx.Replace(subject, "");
         }
 
         private string GetFileName(string name, int copy)

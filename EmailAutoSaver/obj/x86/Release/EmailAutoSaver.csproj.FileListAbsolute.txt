@@ -1,0 +1,13 @@
+D:\Github\Outlook\EmailAutoSaver\bin\x86\Release\EmailAutoSaver.dll
+D:\Github\Outlook\EmailAutoSaver\bin\x86\Release\EmailAutoSaver.pdb
+D:\Github\Outlook\EmailAutoSaver\bin\x86\Release\EmailAutoSaver.dll.manifest
+D:\Github\Outlook\EmailAutoSaver\bin\x86\Release\EmailAutoSaver.vsto
+D:\Github\Outlook\EmailAutoSaver\bin\x86\Release\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
+D:\Github\Outlook\EmailAutoSaver\bin\x86\Release\Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.Properties.Resources.resources
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csproj.GenerateResource.cache
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csproj.CoreCompileInputs.cache
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csproj.CopyComplete
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.dll
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.pdb
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csprojAssemblyReference.cache
