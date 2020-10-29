@@ -10,4 +10,5 @@ D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csproj.CoreCompi
 D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csproj.CopyComplete
 D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.dll
 D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.pdb
-D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csprojAssemblyReference.cache
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.IntellexRibbon.resources
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.NotificationFrm.resources

@@ -4,6 +4,8 @@ D:\Github\Outlook\EmailAutoSaver\bin\x86\Debug\EmailAutoSaver.dll.manifest
 D:\Github\Outlook\EmailAutoSaver\bin\x86\Debug\EmailAutoSaver.vsto
 D:\Github\Outlook\EmailAutoSaver\bin\x86\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
 D:\Github\Outlook\EmailAutoSaver\bin\x86\Debug\Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Debug\EmailAutoSaver.IntellexRibbon.resources
+D:\Github\Outlook\EmailAutoSaver\obj\x86\Debug\EmailAutoSaver.NotificationFrm.resources
 D:\Github\Outlook\EmailAutoSaver\obj\x86\Debug\EmailAutoSaver.Properties.Resources.resources
 D:\Github\Outlook\EmailAutoSaver\obj\x86\Debug\EmailAutoSaver.csproj.GenerateResource.cache
 D:\Github\Outlook\EmailAutoSaver\obj\x86\Debug\EmailAutoSaver.csproj.CoreCompileInputs.cache

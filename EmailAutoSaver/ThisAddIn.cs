@@ -18,22 +18,37 @@ namespace EmailAutoSaver
         List<Items> _taskItems = new List<Items>();
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            Outlook.MAPIFolder inbox = Application.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox);
-            var jobFolder = inbox.Folders["Jobs"];
-            // dynamically attach an event when user drag item into the folder to trigger file saving to local disk..
-            foreach (Outlook.Folder job in jobFolder.Folders)
+            try
             {
-                foreach (Outlook.Folder task in job.Folders)
+                LoadEventHandlers();
+            }
+            catch (System.Exception er)
+            {
+                MessageBox.Show(er.ToString());
+            }
+            
+        }
+
+        public void LoadEventHandlers()
+        {
+            Folder inbox = (Folder) Application.Session.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
+            var jobFolder = GlobalVars.AddOrUpdateFolder(inbox, "Current Projects");
+            //var jobFolder = inbox.Folders["Current Projects"];
+            // dynamically attach an event when user drag item into the folder to trigger file saving to local disk..
+            if (jobFolder == null) return;
+            foreach (Folder job in jobFolder.Folders)
+            {
+                foreach (Folder task in job.Folders)
                 {
-                    foreach (Outlook.Folder subTask in task.Folders)
+                    foreach (Folder subTask in task.Folders)
                     {
                         _taskItems.Add(subTask.Items);
                     }
-                }             
+                }
             }
             foreach (Items task in _taskItems)
             {
-                task.ItemAdd += new Outlook.ItemsEvents_ItemAddEventHandler(AddItem);
+                task.ItemAdd += new ItemsEvents_ItemAddEventHandler(AddItem);
             }
         }
 
@@ -48,54 +63,63 @@ namespace EmailAutoSaver
             var taskName = folders[folders.Count - 2]; // get correspondence
             var subTaskName = folders.Last(); // get sub task
             // Step 2. Save email to disk
-            var dir = @"R:\"; // test c:\jobs\
+            var dir = GlobalVars.NETWORK_DRIVER; // test c:\jobs\
             try
             {
                 string jobFolderPath = Path.Combine(dir, jobName);
-                //MessageBox.Show(jobFolderPath);
+                CreateFolder(jobFolderPath);
                 if (!Directory.Exists(jobFolderPath))
                 {
                     Directory.CreateDirectory(jobFolderPath); // create if not exists..
                 }
                 // check if folder exist
                 var destPath = Path.Combine(dir, jobName, taskName);
-                //MessageBox.Show(destPath);
-                if (!Directory.Exists(destPath))
-                {
-                    Directory.CreateDirectory(destPath); // create if not exists..
-                }
+                CreateFolder(destPath);
                 var finalPath = Path.Combine(dir, jobName, taskName, subTaskName);
-                // MessageBox.Show(finalPath);
-                if (!Directory.Exists(finalPath))
-                {
-                    Directory.CreateDirectory(finalPath); // create if not exists..
-                }
+                CreateFolder(finalPath);
                 // task folder exists, save the email
+                var titleEditFrm = new NotificationFrm() { Text = "Edit Email Title" };
                 string msgTitle = CleanupMessageTitle(msg.Subject, msg.CreationTime);
-                var fileName = GetFileName(finalPath + @"\" + msgTitle, 0);
-                msg.SaveAs(fileName);
+                titleEditFrm.txtValue.Text = msgTitle; // assign msg title for edit?
+                titleEditFrm.ShowDialog();
+                if (string.IsNullOrEmpty(titleEditFrm.txtValue.Text)) return;
+                string fileName = GetFileName(finalPath + @"\" + titleEditFrm.txtValue.Text, 0);   
+                if (!File.Exists(fileName)) // if file doesnt exist, create new file.
+                {
+                    //MessageBox.Show("File Saved as " + fileName);
+                    msg.SaveAs(fileName);
+                }          
             }
             catch (System.Exception e)
             {
                 //MessageBox.Show("Path not exist or network driver not connected...");
             }
         }
+ 
+        private void CreateFolder(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path); // create if not exists..
+            }
+        }
 
         private string CleanupMessageTitle(string subject, DateTime time)
         {
             var rgx = new Regex(@"\||\/|\<|\>|""|:|\*|\\|\?");
-            string currentDT = time.ToString("yyyyMMdd-hhmmss");
+            string currentDT = time.ToString("yyyyMMdd-hhmm");
             return currentDT + "-" + rgx.Replace(subject, "");
         }
 
         private string GetFileName(string name, int copy)
         {
-            string fileName = name + (copy == 0 ? "" : "("+ copy.ToString() + ")") + ".msg" ;
-            if (File.Exists(fileName)) {
-                copy++;
-                fileName = GetFileName(name, copy);
-             }
-            return fileName;
+            return name + ".msg";
+            //string fileName = name + (copy == 0 ? "" : "("+ copy.ToString() + ")") + ".msg" ;
+            //if (File.Exists(fileName)) {
+            //    copy++;
+            //    fileName = GetFileName(name, copy);
+            // }
+            //return fileName;
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
