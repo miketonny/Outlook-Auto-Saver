@@ -34,9 +34,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IntellexRibbon));
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.btnAddProject = this.Factory.CreateRibbonButton();
+            this.btnAddArchive = this.Factory.CreateRibbonButton();
             this.btnReLoad = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
@@ -51,21 +53,30 @@
             // group1
             // 
             this.group1.Items.Add(this.btnAddProject);
+            this.group1.Items.Add(this.btnAddArchive);
             this.group1.Items.Add(this.btnReLoad);
             this.group1.Label = "Emails";
             this.group1.Name = "group1";
             // 
             // btnAddProject
             // 
-            this.btnAddProject.Image = global::EmailAutoSaver.Properties.Resources.add;
+            this.btnAddProject.Image = ((System.Drawing.Image)(resources.GetObject("btnAddProject.Image")));
             this.btnAddProject.Label = "Add New/Existing Project";
             this.btnAddProject.Name = "btnAddProject";
             this.btnAddProject.ShowImage = true;
             this.btnAddProject.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnAddProject_Click);
             // 
+            // btnAddArchive
+            // 
+            this.btnAddArchive.Image = ((System.Drawing.Image)(resources.GetObject("btnAddArchive.Image")));
+            this.btnAddArchive.Label = "Add Archived Project";
+            this.btnAddArchive.Name = "btnAddArchive";
+            this.btnAddArchive.ShowImage = true;
+            this.btnAddArchive.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnAddArchive_Click);
+            // 
             // btnReLoad
             // 
-            this.btnReLoad.Image = global::EmailAutoSaver.Properties.Resources.refresh;
+            this.btnReLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnReLoad.Image")));
             this.btnReLoad.Label = "Refresh Hooks";
             this.btnReLoad.Name = "btnReLoad";
             this.btnReLoad.ShowImage = true;
@@ -91,6 +102,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddProject;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnReLoad;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddArchive;
     }
 
     partial class ThisRibbonCollection

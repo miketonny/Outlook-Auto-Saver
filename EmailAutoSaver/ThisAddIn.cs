@@ -16,6 +16,7 @@ namespace EmailAutoSaver
     public partial class ThisAddIn
     {
         List<Items> _taskItems = new List<Items>();
+        List<Items> _archivedItems = new List<Items>();
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             try
@@ -26,17 +27,38 @@ namespace EmailAutoSaver
             {
                 MessageBox.Show(er.ToString());
             }
-            
+            Application.ItemSend += new ApplicationEvents_11_ItemSendEventHandler(Email_SendingValidation);
         }
+
+        #region Email Sender
+        // append additional info onto email subjects etc when user clicks 'send'
+        private void Email_SendingValidation(object Item, ref bool Cancel)
+        {
+            MailItem mail = Item as MailItem;
+            if (mail != null)
+            {
+                string additionalSubject = DateTime.Now.ToString("yyyyMMdd"); // Append date time to email subject
+                if (!mail.Subject.Contains(additionalSubject))
+                    mail.Subject = string.Format("{0} {1}", additionalSubject, mail.Subject);
+            }
+        }
+
+        #endregion
 
         public void LoadEventHandlers()
         {
             Folder inbox = (Folder) Application.Session.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
-            var jobFolder = GlobalVars.AddOrUpdateFolder(inbox, "Current Projects");
-            //var jobFolder = inbox.Folders["Current Projects"];
-            // dynamically attach an event when user drag item into the folder to trigger file saving to local disk..
-            if (jobFolder == null) return;
-            foreach (Folder job in jobFolder.Folders)
+            // Get folder list for attaching the event handlers
+            GetCurrentProjectItems(inbox, "Current Projects");
+            GetArchiveProjectItems(inbox, "Archived Projects");
+        }
+
+        // default to 3rd level down to the nested folder structure to attach the handler when dragged into
+        private void GetCurrentProjectItems(Folder inbox, string folderName)
+        {
+            var fdr = GlobalVars.AddOrUpdateFolder(inbox, folderName);
+            if (fdr == null) return;
+            foreach (Folder job in fdr.Folders)
             {
                 foreach (Folder task in job.Folders)
                 {
@@ -48,34 +70,57 @@ namespace EmailAutoSaver
             }
             foreach (Items task in _taskItems)
             {
-                task.ItemAdd += new ItemsEvents_ItemAddEventHandler(AddItem);
+                // remove the handler just in case
+                task.ItemAdd -= new ItemsEvents_ItemAddEventHandler((sender) => AddItem(sender, GlobalVars.Current_Project_DRIVER)); ;
+                task.ItemAdd += new ItemsEvents_ItemAddEventHandler((sender) => AddItem(sender, GlobalVars.Current_Project_DRIVER));
             }
         }
 
-        private void AddItem(object item)
+        private void GetArchiveProjectItems(Folder inbox, string folderName)
+        {
+            var fdr = GlobalVars.AddOrUpdateFolder(inbox, folderName);
+            if (fdr == null) return;
+            foreach (Folder job in fdr.Folders)
+            {
+                foreach (Folder task in job.Folders)
+                {
+                    foreach (Folder subTask in task.Folders)
+                    {
+                        _archivedItems.Add(subTask.Items);
+                    }
+                }
+            }
+            foreach (Items task in _archivedItems)
+            {
+                // remove the handler just in case
+                task.ItemAdd -= new ItemsEvents_ItemAddEventHandler((sender) => AddItem(sender, GlobalVars.Archived_Project_DRIVER)); ;
+                task.ItemAdd += new ItemsEvents_ItemAddEventHandler((sender) => AddItem(sender, GlobalVars.Archived_Project_DRIVER));
+            }
+        }
+        #region Email Saver
+        private void AddItem(object item, string path)
         {
             // Step 1. fetch folder path etc..  
             var msg = item as MailItem;
             var fdr = msg.Parent as Folder;
             var folders = fdr.FolderPath.Split('\\').ToList();
             // gets the last two job/task name
-            var jobName = folders[folders.Count -3]; // get job name
+            var jobName = folders[folders.Count - 3]; // get job name
             var taskName = folders[folders.Count - 2]; // get correspondence
             var subTaskName = folders.Last(); // get sub task
             // Step 2. Save email to disk
-            var dir = GlobalVars.NETWORK_DRIVER; // test c:\jobs\
             try
             {
-                string jobFolderPath = Path.Combine(dir, jobName);
+                string jobFolderPath = Path.Combine(path, jobName);
                 CreateFolder(jobFolderPath);
                 if (!Directory.Exists(jobFolderPath))
                 {
                     Directory.CreateDirectory(jobFolderPath); // create if not exists..
                 }
                 // check if folder exist
-                var destPath = Path.Combine(dir, jobName, taskName);
+                var destPath = Path.Combine(path, jobName, taskName);
                 CreateFolder(destPath);
-                var finalPath = Path.Combine(dir, jobName, taskName, subTaskName);
+                var finalPath = Path.Combine(path, jobName, taskName, subTaskName);
                 CreateFolder(finalPath);
                 // task folder exists, save the email
                 var titleEditFrm = new NotificationFrm() { Text = "Edit Email Title" };
@@ -83,19 +128,19 @@ namespace EmailAutoSaver
                 titleEditFrm.txtValue.Text = msgTitle; // assign msg title for edit?
                 titleEditFrm.ShowDialog();
                 if (string.IsNullOrEmpty(titleEditFrm.txtValue.Text)) return;
-                string fileName = GetFileName(finalPath + @"\" + titleEditFrm.txtValue.Text, 0);   
+                string fileName = GetFileName(finalPath + @"\" + titleEditFrm.txtValue.Text, 0);
                 if (!File.Exists(fileName)) // if file doesnt exist, create new file.
                 {
                     //MessageBox.Show("File Saved as " + fileName);
                     msg.SaveAs(fileName);
-                }          
+                }
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 //MessageBox.Show("Path not exist or network driver not connected...");
             }
         }
- 
+
         private void CreateFolder(string path)
         {
             if (!Directory.Exists(path))
@@ -114,13 +159,9 @@ namespace EmailAutoSaver
         private string GetFileName(string name, int copy)
         {
             return name + ".msg";
-            //string fileName = name + (copy == 0 ? "" : "("+ copy.ToString() + ")") + ".msg" ;
-            //if (File.Exists(fileName)) {
-            //    copy++;
-            //    fileName = GetFileName(name, copy);
-            // }
-            //return fileName;
         }
+
+        #endregion
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {

@@ -19,6 +19,11 @@ namespace EmailAutoSaver
 
         private void btnAddProject_Click(object sender, RibbonControlEventArgs e)
         {
+            CreateInboxFolders("Current Projects");
+        }
+
+        private void CreateInboxFolders(string projFolder)
+        {
             var newNameFrm = new NotificationFrm
             {
                 Text = "Enter/Paste Project Name"
@@ -27,9 +32,9 @@ namespace EmailAutoSaver
             // Step 1 : collect job name
             // Step 2 : Create job folder onto outlook folder
             // Step 2.1 check wheter jobs folder exist, if not, create it
-            Folder inbox = (Folder) Globals.ThisAddIn.Application.Session.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
+            Folder inbox = (Folder)Globals.ThisAddIn.Application.Session.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
             string newProjName = newNameFrm.txtValue.Text.Trim();
-            var currentProjFolder = GlobalVars.AddOrUpdateFolder(inbox, "Current Projects");
+            var currentProjFolder = GlobalVars.AddOrUpdateFolder(inbox, projFolder);
             if (string.IsNullOrEmpty(newProjName)) return;
             try
             {
@@ -40,7 +45,7 @@ namespace EmailAutoSaver
                 GlobalVars.AddOrUpdateFolder(correnspondenceFolder, "Internal");
                 GlobalVars.AddOrUpdateFolder(correnspondenceFolder, "Suppliers-Subcon");
                 // Step 3 : Create job folder and template onto disk
-                var projectFolderPath = Path.Combine(GlobalVars.NETWORK_DRIVER, newProjName);
+                var projectFolderPath = Path.Combine(GlobalVars.Archived_Project_DRIVER, newProjName);
                 CreateFolder(projectFolderPath);
                 CreateFolder(Path.Combine(projectFolderPath, "00 not used"));
                 CreateFolder(Path.Combine(projectFolderPath, "01 Budget & Scope"));
@@ -62,7 +67,6 @@ namespace EmailAutoSaver
             {
                 MessageBox.Show(er.Message.ToString());
             }
-           
         }
 
         private void CreateFolder(string path)
@@ -77,6 +81,11 @@ namespace EmailAutoSaver
         {
             // Step 4: Trigger a re-hooking of the event handlers for new folders
             Globals.ThisAddIn.LoadEventHandlers();
+        }
+
+        private void btnAddArchive_Click(object sender, RibbonControlEventArgs e)
+        {
+            CreateInboxFolders("Archived Projects");
         }
     }
 }
