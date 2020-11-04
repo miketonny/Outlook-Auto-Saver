@@ -17,6 +17,9 @@ namespace EmailAutoSaver
     {
         List<Items> _taskItems = new List<Items>();
         List<Items> _archivedItems = new List<Items>();
+        Inspectors inspectors;
+        private Outlook.Application _application = null;
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             try
@@ -27,22 +30,52 @@ namespace EmailAutoSaver
             {
                 MessageBox.Show(er.ToString());
             }
-            Application.ItemSend += new ApplicationEvents_11_ItemSendEventHandler(Email_SendingValidation);
+            // adding event handlers
+            _application = Globals.ThisAddIn.Application;
+            _application.ItemLoad += new ApplicationEvents_11_ItemLoadEventHandler(LoadItems);
+            inspectors = Application.Inspectors;
+            inspectors.NewInspector += new InspectorsEvents_NewInspectorEventHandler(Email_SendingValidation);
         }
 
+        // append additional info onto email subjects etc when user create/reply/forward/replyall
         #region Email Sender
-        // append additional info onto email subjects etc when user clicks 'send'
-        private void Email_SendingValidation(object Item, ref bool Cancel)
+        // adding event hookers to items gets loaded, i.e. emails etc ==
+        private void LoadItems(object item)
         {
-            MailItem mail = Item as MailItem;
+            ItemEvents_10_Event ie = item as ItemEvents_10_Event;
+            ie.ReplyAll += new ItemEvents_10_ReplyAllEventHandler(SubjectValidation);
+            ie.Reply += new ItemEvents_10_ReplyEventHandler(SubjectValidation);
+            ie.Forward += new ItemEvents_10_ForwardEventHandler(SubjectValidation);
+        }
+
+        private void Email_SendingValidation(Inspector inspector)
+        {
+            MailItem mail = inspector.CurrentItem as MailItem;
+            AddOrUpdateSubject(mail);
+        }
+
+        private void SubjectValidation(object item, ref bool Cancel)
+        {
+            MailItem mt = item as MailItem;
+            AddOrUpdateSubject(mt);
+        }
+
+        private void AddOrUpdateSubject(MailItem mail)
+        {
             if (mail != null)
             {
                 string additionalSubject = DateTime.Now.ToString("yyyyMMdd"); // Append date time to email subject
-                if (!mail.Subject.Contains(additionalSubject))
-                    mail.Subject = string.Format("{0} {1}", additionalSubject, mail.Subject);
+                if (mail.Subject != null)
+                {
+                    if (!mail.Subject.StartsWith(additionalSubject)) // change only when the subject doesnt start with yyyyMMdd
+                        mail.Subject = string.Format("{0} {1}", additionalSubject, mail.Subject);
+                }
+                else
+                {
+                    mail.Subject = additionalSubject;
+                }      
             }
         }
-
         #endregion
 
         public void LoadEventHandlers()
