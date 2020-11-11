@@ -17,7 +17,7 @@ namespace EmailAutoSaver
     {
         List<Items> _taskItems = new List<Items>();
         List<Items> _archivedItems = new List<Items>();
-        Inspectors inspectors;
+        //Inspectors inspectors;
         private Outlook.Application _application = null;
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
@@ -33,8 +33,8 @@ namespace EmailAutoSaver
             // adding event handlers
             _application = Globals.ThisAddIn.Application;
             _application.ItemLoad += new ApplicationEvents_11_ItemLoadEventHandler(LoadItems);
-            inspectors = Application.Inspectors;
-            inspectors.NewInspector += new InspectorsEvents_NewInspectorEventHandler(Email_SendingValidation);
+            //inspectors = Application.Inspectors;
+            //inspectors.NewInspector += new InspectorsEvents_NewInspectorEventHandler(Email_SendingValidation);
         }
 
         // append additional info onto email subjects etc when user create/reply/forward/replyall
@@ -48,11 +48,11 @@ namespace EmailAutoSaver
             ie.Forward += new ItemEvents_10_ForwardEventHandler(SubjectValidation);
         }
 
-        private void Email_SendingValidation(Inspector inspector)
-        {
-            MailItem mail = inspector.CurrentItem as MailItem;
-            AddOrUpdateSubject(mail);
-        }
+        //private void Email_SendingValidation(Inspector inspector)
+        //{
+        //    MailItem mail = inspector.CurrentItem as MailItem;
+        //    AddOrUpdateSubject(mail);
+        //}
 
         private void SubjectValidation(object item, ref bool Cancel)
         {
