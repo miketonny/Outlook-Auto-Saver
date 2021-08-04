@@ -45,7 +45,7 @@ namespace EmailAutoSaver
                 GlobalVars.AddOrUpdateFolder(correnspondenceFolder, "Internal");
                 GlobalVars.AddOrUpdateFolder(correnspondenceFolder, "Suppliers-Subcon");
                 // Step 3 : Create job folder and template onto disk
-                var projectFolderPath = Path.Combine(GlobalVars.Archived_Project_DRIVER, newProjName);
+                var projectFolderPath = Path.Combine(projFolder == "Current Projects" ? GlobalVars.Current_Project_DRIVER : GlobalVars.Archived_Project_DRIVER, newProjName);
                 CreateFolder(projectFolderPath);
                 CreateFolder(Path.Combine(projectFolderPath, "00 not used"));
                 CreateFolder(Path.Combine(projectFolderPath, "01 Budget & Scope"));

@@ -9,8 +9,8 @@ namespace EmailAutoSaver
 {
     public static class GlobalVars
     {
-        public static string Current_Project_DRIVER = @"R:\";
-        public static string Archived_Project_DRIVER = @"X:\0. 90000 - ARCHIVED JOBS\";
+        public static string Current_Project_DRIVER = @"C:\";
+        public static string Archived_Project_DRIVER = @"C:\0. 90000 - ARCHIVED JOBS\";
 
         public static Folder AddOrUpdateFolder(Folder parent, string newFolderName)
         {

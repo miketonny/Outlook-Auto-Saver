@@ -104,8 +104,9 @@ namespace EmailAutoSaver
             foreach (Items task in _taskItems)
             {
                 // remove the handler just in case
-                task.ItemAdd -= new ItemsEvents_ItemAddEventHandler((sender) => AddItem(sender, GlobalVars.Current_Project_DRIVER)); ;
-                task.ItemAdd += new ItemsEvents_ItemAddEventHandler((sender) => AddItem(sender, GlobalVars.Current_Project_DRIVER));
+                var handler = new ItemsEvents_ItemAddEventHandler((sender) => AddItem(sender, GlobalVars.Current_Project_DRIVER));
+                task.ItemAdd -= handler;
+                task.ItemAdd += handler;
             }
         }
 
