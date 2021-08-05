@@ -15,15 +15,18 @@ namespace EmailAutoSaver
 {
     public partial class ThisAddIn
     {
-        List<Items> _taskItems = new List<Items>();
-        List<Items> _archivedItems = new List<Items>();
+        private List<Items> _taskItems;
+        private List<Items> _archivedItems;
         //Inspectors inspectors;
         private Outlook.Application _application = null;
+        public Folder inbox; // move to global scope
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             try
             {
+                inbox = (Folder)Application.GetNamespace("MAPI").GetDefaultFolder(OlDefaultFolders.olFolderInbox);
+                EmailList = new Dictionary<string, string>();
                 LoadEventHandlers();
             }
             catch (System.Exception er)
@@ -33,6 +36,7 @@ namespace EmailAutoSaver
             // adding event handlers
             _application = Globals.ThisAddIn.Application;
             _application.ItemLoad += new ApplicationEvents_11_ItemLoadEventHandler(LoadItems);
+           
             //inspectors = Application.Inspectors;
             //inspectors.NewInspector += new InspectorsEvents_NewInspectorEventHandler(Email_SendingValidation);
         }
@@ -80,8 +84,9 @@ namespace EmailAutoSaver
 
         public void LoadEventHandlers()
         {
-            Folder inbox = (Folder) Application.Session.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
             // Get folder list for attaching the event handlers
+            _taskItems = new List<Items>();
+            _archivedItems = new List<Items>();
             GetCurrentProjectItems(inbox, "Current Projects");
             GetArchiveProjectItems(inbox, "Archived Projects");
         }
@@ -132,12 +137,24 @@ namespace EmailAutoSaver
             }
         }
         #region Email Saver
+        private Dictionary<string, string> EmailList;
         private void AddItem(object item, string path)
         {
             // Step 1. fetch folder path etc..  
+           
             var msg = item as MailItem;
             var fdr = msg.Parent as Folder;
             var folders = fdr.FolderPath.Split('\\').ToList();
+            // in place to prevent a multi-firing issue when hookers are refreshed and rebinded with new handlers.
+            try
+            {
+                EmailList.Add(msg.EntryID, "11");
+            }
+            catch (System.Exception)
+            {
+                // same email catched, exit process
+                return;
+            }           
             // gets the last two job/task name
             var jobName = folders[folders.Count - 3]; // get job name
             var taskName = folders[folders.Count - 2]; // get correspondence

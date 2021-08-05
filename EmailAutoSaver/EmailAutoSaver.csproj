@@ -253,10 +253,11 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>EmailAutoSaver_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>EC0005382BFC0929F8F0983E5DB1DA8130C711B2</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>4504D325B692F40DE0AEBA29E685A6EADE90234F</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>

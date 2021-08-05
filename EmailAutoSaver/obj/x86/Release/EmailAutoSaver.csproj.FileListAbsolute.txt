@@ -26,4 +26,3 @@ C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\x86\Re
 C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csproj.CopyComplete
 C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.dll
 C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.pdb
-C:\Users\micha\Documents\Github\Outlook\EmailAutoSaver\EmailAutoSaver\obj\x86\Release\EmailAutoSaver.csprojAssemblyReference.cache
