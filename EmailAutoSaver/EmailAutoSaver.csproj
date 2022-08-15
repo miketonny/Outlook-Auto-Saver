@@ -216,6 +216,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="EmailAutoSaver_1_TemporaryKey.pfx" />
+    <None Include="EmailAutoSaver_2_TemporaryKey.pfx" />
     <None Include="EmailAutoSaver_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -253,10 +254,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>EmailAutoSaver_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>EmailAutoSaver_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>EC0005382BFC0929F8F0983E5DB1DA8130C711B2</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>13D4FFAA4A298FE99F16FDA6C24364383C96E6A8</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>

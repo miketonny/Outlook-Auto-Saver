@@ -32,9 +32,9 @@ namespace EmailAutoSaver
             // Step 1 : collect job name
             // Step 2 : Create job folder onto outlook folder
             // Step 2.1 check wheter jobs folder exist, if not, create it
-            Folder inbox = (Folder)Globals.ThisAddIn.Application.Session.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
+            //Folder inbox = (Folder)Globals.ThisAddIn.Application.Session.GetDefaultFolder(OlDefaultFolders.olFolderInbox);
             string newProjName = newNameFrm.txtValue.Text.Trim();
-            var currentProjFolder = GlobalVars.AddOrUpdateFolder(inbox, projFolder);
+            var currentProjFolder = GlobalVars.AddOrUpdateFolder(Globals.ThisAddIn.inbox, projFolder);
             if (string.IsNullOrEmpty(newProjName)) return;
             try
             {
@@ -62,6 +62,8 @@ namespace EmailAutoSaver
                 CreateFolder(Path.Combine(projectFolderPath, "02 Correspondence", "Suppliers-Subcon"));
                 // Step 4: Trigger a re-hooking of the event handlers for new folders
                 Globals.ThisAddIn.LoadEventHandlers();
+                //MessageBox.Show("Outlook needs a restart to re-attach email hooks, Please open outlook again.");
+                //Globals.ThisAddIn.Application.Application.Quit();
             }
             catch (System.Exception er)
             {
@@ -80,6 +82,8 @@ namespace EmailAutoSaver
         private void btnReLoad_Click(object sender, RibbonControlEventArgs e)
         {
             // Step 4: Trigger a re-hooking of the event handlers for new folders
+            //MessageBox.Show("Outlook needs a restart to re-attach email hooks, Please open outlook again.");
+            //Globals.ThisAddIn.Application.Application.Quit();
             Globals.ThisAddIn.LoadEventHandlers();
         }
 
